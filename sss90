@@ -1,0 +1,57 @@
+using System;
+
+namespace Rectangles
+{
+	public static class RectanglesTask
+	{
+		// Пересекаются ли два прямоугольника (пересечение только по границе также считается пересечением)
+		public static bool AreIntersected(Rectangle r1, Rectangle r2)
+		{
+			bool intersection1 = true;
+			bool intersection2 = true;
+			bool intersection3 = true;
+			bool intersection4 = true;
+			// так можно обратиться к координатам левого верхнего угла первого прямоугольника: r1.Left, r1.Top
+			if (r1.Left + r1.Width < r2.Left) intersection1 = false;
+			if (r1.Left > r2.Left + r2.Width) intersection2 = false;
+			if (r1.Top + r1.Height < r2.Top) intersection3 = false;
+			if (r1.Top > r2.Top + r2.Height) intersection4 = false;
+			return intersection1 && intersection2 && intersection3 && intersection4;
+		}
+
+		// Площадь пересечения прямоугольников
+		public static int IntersectionSquare(Rectangle r1, Rectangle r2)
+		{
+			if (!AreIntersected(r1, r2)) return 0;
+			else if ((r1.Left <= r2.Left) && (r1.Top <= r2.Top)) return Math.Min((r1.Top + r1.Height - r2.Top), Math.Min(r1.Height, r2.Height)) * Math.Min((r1.Left + r1.Width - r2.Left), Math.Min(r1.Width, r2.Width));
+			else if ((r1.Left <= r2.Left) && (r2.Top <= r1.Top)) return Math.Min((r1.Left + r1.Width - r2.Left), Math.Min(r1.Width, r2.Width)) * Math.Min((r2.Top + r2.Height - r1.Top), Math.Min(r1.Height, r2.Height));
+			else if ((r2.Left <= r1.Left) && (r2.Top <= r1.Top)) return Math.Min((r2.Top + r2.Height - r1.Top), Math.Min(r1.Height, r2.Height)) * Math.Min((r2.Left + r2.Width - r1.Left), Math.Min(r1.Width, r2.Width));
+			else return Math.Min((r2.Left + r2.Width - r1.Left), Math.Min(r1.Width, r2.Width)) * Math.Min((r1.Top + r1.Height - r2.Top), Math.Min(r1.Height, r2.Height));
+		}
+
+		// Если один из прямоугольников целиком находится внутри другого — вернуть номер (с нуля) внутреннего.
+		// Иначе вернуть -1
+		// Если прямоугольники совпадают, можно вернуть номер любого из них.
+		public static int IndexOfInnerRectangle(Rectangle r1, Rectangle r2)
+		{
+			bool intersection5 = false;
+			bool intersection6 = false;
+			bool intersection7 = false;
+			bool intersection8 = false;
+
+			if (r1.Left < r2.Left && r1.Left + r1.Width > r2.Left + r2.Width) intersection5 = true;
+			if (r1.Top < r2.Top && r1.Top + r1.Height > r2.Left + r2.Height) intersection6 = true;
+			if (intersection5 && intersection6) return 1;
+
+			if (r2.Left < r1.Left && r2.Left + r2.Width > r1.Left + r1.Width) intersection7 = true;
+			if (r2.Top < r1.Top && r2.Top + r2.Height > r1.Left + r1.Height) intersection8 = true;
+			if (intersection7 && intersection8) return 0;
+
+			if ((r2.Width * r2.Height != 0) || (r2.Width * r2.Height == 0) && (r2.Left >= r1.Left) && (r2.Left <= r1.Left + r1.Width) && (r2.Top >= r1.Top) && (r2.Top <= r1.Top + r1.Height)) return -1;
+			else
+				return -1;
+			if ((r1.Width * r1.Height != 0) || (r1.Width * r1.Height == 0) && (r1.Left >= r2.Left) && (r1.Left <= r2.Left + r2.Width) && (r1.Top >= r2.Top) && (r1.Top <= r2.Top + r2.Height)) return 0;
+
+		}
+	}
+}
